@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Book</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .App {
+            text-align: center;
+        }
+
+        .App-header {
+            background-color: #05445e;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .recipe-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 800px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+
+        .recipe-container:hover {
+            transform: scale(1.02);
+        }
+
+        .recipe-item {
+            margin-bottom: 30px;
+        }
+
+        .recipe-image {
+            width: 100%;
+            max-width: 300px; 
+            border-radius: 5px;
+            border: 2px solid #a3d2ca;
+        }
+
+        h3 {
+            color: #05445e;
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        h4 {
+            color: #05445e;
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        ul {
+            text-align: left;
+            margin: 0 auto;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        li {
+            margin: 5px 0;
+            background-color: #e1f5fe;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .instruction-step {
+            margin: 10px 0;
+            text-align: left;
+            background-color: #fff3e0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .navigation-buttons {
+            margin-top: 20px;
+        }
+
+        .navigation-buttons button {
+            background-color: #a3d2ca;
+            color: #05445e;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 16px;
+        }
+
+        .navigation-buttons button:hover {
+            background-color: #05445e;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="App">
+        <header class="App-header">
+            <h1>Recipe Book</h1>
+            <p>Delicious and easy recipes to try!</p>
+        </header>
+        <div class="recipe-container">
+            <div class="recipe-item">
+                <img class="recipe-image" src="" alt="Recipe Image">
+                <h3></h3>
+                <h4>Prep Time: <span class="prep-time"></span></h4>
+                <h4>Difficulty: <span class="difficulty"></span></h4>
+                <h4>Ingredients:</h4>
+                <ul class="ingredients-list"></ul>
+                <h4>Instructions:</h4>
+                <div class="instructions"></div>
+                <h4>Tips:</h4>
+                <p class="tips"></p>
+                <h4>Variations:</h4>
+                <p class="variations"></p>
+            </div>
+            <div class="navigation-buttons">
+                <button onclick="prevRecipe()">Previous</button>
+                <button onclick="nextRecipe()">Next</button>
+            </div>
+        </div>
+        <footer>
+            <p>&copy; 2024 Recipe Book. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const recipes = [
+            {
+                name: 'Veggie Stir-Fry',
+                image: 'https://images.themodernproper.com/billowy-turkey/production/posts/VegetableStirFry_9.jpg?w=600&q=82&auto=format&fit=crop&dm=1703377301&s=da9a5f34539f904ba0ad0f334d38db2f',
+                prepTime: '20 minutes',
+                difficulty: 'Easy',
+                ingredients: [
+                    '1 cup broccoli florets',
+                    '1 large carrot (sliced)',
+                    '1 red bell pepper (sliced)',
+                    '2 tablespoons soy sauce',
+                    '2 cloves garlic (minced)',
+                    '1 tablespoon ginger (minced)',
+                    '2 tablespoons olive oil',
+                    '1 tablespoon sesame oil (optional)',
+                    '1 tablespoon sesame seeds (optional)',
+                    'Cooked rice or noodles (for serving)',
+                ],
+                instructions: [
+                    'Prepare the Vegetables: Wash the broccoli, carrot, and bell pepper thoroughly...',
+                    'Heat the Oil: Heat the olive oil in a large skillet or wok over medium-high heat...',
+                    'Add Garlic and Ginger: Once the oil is hot, add the minced garlic and ginger...',
+                    'Stir-Fry the Vegetables: Add the broccoli, carrots, and bell pepper to the pan...',
+                    'Add Soy Sauce: Pour the soy sauce over the vegetables and stir to coat them evenly...',
+                    'Optional Garnishes: If you\'d like, sprinkle sesame seeds over the stir-fry...',
+                    'Serve: Remove from heat and serve the stir-fry over cooked rice or noodles...',
+                ],
+                tips: 'Stir-fry on high heat to preserve the crunch of the veggies...',
+                variations: 'Add tofu or chicken for extra protein...',
+            },
+            {
+                name: 'Chicken Fry',
+      image: 'https://www.whiskaffair.com/wp-content/uploads/2021/10/Andhra-Chicken-Curry-2-1.jpg', // Replace with a valid URL
+      prepTime: '45 minutes',
+      difficulty: 'Medium',
+      ingredients: [
+        '- 500g chicken (cut into pieces)',
+        '- 1 tablespoon ginger-garlic paste',
+        '- 2 tablespoons red chili powder',
+        '- 1 teaspoon turmeric powder',
+        '- Salt to taste',
+        '- 2 tablespoons oil for frying',
+        '- Fresh coriander for garnish',
+      ],
+      instructions: [
+        '1. Marinate the Chicken : In a bowl, mix the chicken pieces with ginger-garlic paste, red chili powder, turmeric powder, and salt. Let it marinate for at least 30 minutes.',
+        '2. Heat Oil : In a frying pan, heat oil over medium heat.',
+        '3. Fry Chicken : Add the marinated chicken to the pan and fry until golden brown and cooked through, about 20-25 minutes.',
+        '4. Garnish : Garnish with fresh coriander and serve hot.',
+      ],
+      tips: 'Fry on medium heat to ensure the chicken cooks evenly without burning.',
+      variations: 'You can add vegetables like bell peppers or onions while frying for added flavor.',
+    },
+    {
+      name: 'Pancakes',
+      image: 'https://preppykitchen.com/wp-content/uploads/2023/02/pancakes-feature-new.jpg',
+      prepTime: '15 minutes',
+      difficulty: 'Easy',
+      ingredients: [
+        '- 1 cup all-purpose flour',
+        '- 2 tablespoons sugar',
+        '- 2 teaspoons baking powder',
+        '- 1/2 teaspoon salt',
+        '- 1 cup milk',
+        '- 1 large egg',
+        '- 2 tablespoons melted butter',
+        '- Cooking spray or additional butter for frying',
+        '- Maple syrup or fresh fruit for serving',
+      ],
+      instructions: [
+        '1. Mix Dry Ingredients : In a large bowl, whisk together the flour, sugar, baking powder, and salt.',
+        '2. Combine Wet Ingredients : In another bowl, combine the milk, egg, and melted butter. Whisk until smooth.',
+        '3. Combine Mixtures : Pour the wet ingredients into the dry ingredients. Stir gently until just combined; some lumps are okay.',
+        '4. Heat the Pan : Heat a non-stick skillet or griddle over medium heat and lightly grease it with cooking spray or butter.',
+        '5. Cook Pancakes : Pour 1/4 cup of batter onto the skillet for each pancake. Cook until bubbles form on the surface, then flip and cook until golden brown on both sides.',
+        '6. Serve : Serve warm with maple syrup or fresh fruit. Enjoy your delicious pancakes!',
+      ],
+      tips: 'Do not overmix the batter for fluffy pancakes; let it rest for a few minutes before cooking.',
+      variations: 'Add chocolate chips or blueberries to the batter for extra flavor!',
+     },{name: 'Pancakes',
+      image: 'https://preppykitchen.com/wp-content/uploads/2023/02/pancakes-feature-new.jpg',
+      prepTime: '15 minutes',
+      difficulty: 'Easy',
+      ingredients: [
+        '- 1 cup all-purpose flour',
+        '- 2 tablespoons sugar',
+        '- 2 teaspoons baking powder',
+        '- 1/2 teaspoon salt',
+        '- 1 cup milk',
+        '- 1 large egg',
+        '- 2 tablespoons melted butter',
+        '- Cooking spray or additional butter for frying',
+        '- Maple syrup or fresh fruit for serving',
+      ],
+      instructions: [
+        '1. Mix Dry Ingredients : In a large bowl, whisk together the flour, sugar, baking powder, and salt.',
+        '2. Combine Wet Ingredients : In another bowl, combine the milk, egg, and melted butter. Whisk until smooth.',
+        '3. Combine Mixtures : Pour the wet ingredients into the dry ingredients. Stir gently until just combined; some lumps are okay.',
+        '4. Heat the Pan : Heat a non-stick skillet or griddle over medium heat and lightly grease it with cooking spray or butter.',
+        '5. Cook Pancakes : Pour 1/4 cup of batter onto the skillet for each pancake. Cook until bubbles form on the surface, then flip and cook until golden brown on both sides.',
+        '6. Serve : Serve warm with maple syrup or fresh fruit. Enjoy your delicious pancakes!',
+      ],
+      tips: 'Do not overmix the batter for fluffy pancakes; let it rest for a few minutes before cooking.',
+      variations: 'Add chocolate chips or blueberries to the batter for extra flavor!',
+    },
+        ];
+
+        let currentIndex = 0;
+
+        function renderRecipe() {
+            const recipe = recipes[currentIndex];
+            document.querySelector('.recipe-image').src = recipe.image;
+            document.querySelector('h3').textContent = recipe.name;
+            document.querySelector('.prep-time').textContent = recipe.prepTime;
+            document.querySelector('.difficulty').textContent = recipe.difficulty;
+
+            const ingredientsList = document.querySelector('.ingredients-list');
+            ingredientsList.innerHTML = '';
+            recipe.ingredients.forEach(ingredient => {
+                const li = document.createElement('li');
+                li.textContent = ingredient;
+                ingredientsList.appendChild(li);
+            });
+
+            const instructionsDiv = document.querySelector('.instructions');
+            instructionsDiv.innerHTML = '';
+            recipe.instructions.forEach(step => {
+                const p = document.createElement('p');
+                p.className = 'instruction-step';
+                p.textContent = step;
+                instructionsDiv.appendChild(p);
+            });
+
+            document.querySelector('.tips').textContent = recipe.tips;
+            document.querySelector('.variations').textContent = recipe.variations;
+        }
+
+        function nextRecipe() {
+            currentIndex = (currentIndex + 1) % recipes.length;
+            renderRecipe();
+        }
+
+        function prevRecipe() {
+            currentIndex = (currentIndex - 1 + recipes.length) % recipes.length;
+            renderRecipe();
+        }
+
+        window.onload = renderRecipe; 
+    </script>
+</body>
+</html>
